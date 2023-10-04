@@ -1,0 +1,20 @@
+{
+    "scripts": {
+        "lint": {
+            "phpstan": ["./vendor/bin/phpstan", "analyse"]
+        }
+    },
+
+    "processTimeout": 120,
+
+    "include": [
+        "bin",
+        "scripts",
+        "app",
+        "tests"
+    ],
+    "exclude": [
+        "tests/fixtures",
+        "bootstrap/app.php"
+    ]
+}
