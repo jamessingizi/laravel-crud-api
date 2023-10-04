@@ -9,20 +9,19 @@ use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
-
     public static function user(GetUserRequest $request): JsonResponse
     {
-        if(auth()->user()->id != $request->id){
+        if (auth()->user()->id != $request->id) {
             return response()->json(['message' => 'unauthorised to view this resource'], 401);
         }
         $user = User::query()->findOrFail($request->id);
+
         return response()->json($user, 200);
     }
 
-
     public function updateUser(UpdateUserRequest $request): JsonResponse
     {
-        if(auth()->user()->id != $request->id){
+        if (auth()->user()->id != $request->id) {
             return response()->json(['message' => 'unauthorised to view this resource'], 401);
         }
 
@@ -30,8 +29,7 @@ class UserController extends Controller
         $user->update(
             $request->only(['name', 'email', 'role', 'phone_number'])
         );
+
         return response()->json($user, 201);
     }
-
-
 }

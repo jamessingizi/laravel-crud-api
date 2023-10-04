@@ -21,9 +21,9 @@ class UpdateUserRequest extends FormRequest
         return [
             'id' => 'required|integer',
             'name' => 'required|string:max:32',
-            'email' => 'required|email|'.Rule::unique('users')->ignore($this->id),
+            'email' => 'required|email|' . Rule::unique('users')->ignore($this->id),
             'phone_number' => 'required|numeric|min:10',
-            'role' => 'required|string|in:admin,user'
+            'role' => 'required|string|in:admin,user',
         ];
     }
 }

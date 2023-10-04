@@ -18,27 +18,27 @@ class AdminController extends Controller
     {
         $perPage = $request->query('per_page', 10);
         $users = User::query()->latest()->paginate($perPage);
+
         return UserResource::collection($users);
     }
-
 
     public static function user(GetUserRequest $request): JsonResponse
     {
         $user = User::query()->findOrFail($request->id);
+
         return response()->json($user, 200);
     }
-
 
     public function createUser(CreateUserRequest $request): JsonResponse
     {
         $user = User::create($request->all());
-        if(!$user){
+        if (! $user) {
             return response()->json(['message' => 'error creating user'], 400);
         }
         event(new UserCreated($user));
+
         return response()->json($user, 201);
     }
-
 
     public function updateUser(UpdateUserRequest $request): JsonResponse
     {
@@ -46,6 +46,7 @@ class AdminController extends Controller
         $user->update(
             $request->only(['name', 'email', 'role', 'phone_number'])
         );
+
         return response()->json($user, 201);
     }
 }

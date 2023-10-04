@@ -12,7 +12,10 @@ class UserAuthenticationTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    public function test_user_can_login(): void
+    /**
+     * @test
+     */
+    public function user_can_login(): void
     {
         $password = 'test_password';
         $user = User::factory()->create([
@@ -21,18 +24,21 @@ class UserAuthenticationTest extends TestCase
 
         $response = $this->post('/api/login', [
             'email' => $user->email,
-            'password' => $password
+            'password' => $password,
         ]);
 
         $response->assertStatus(200);
         $response->assertJson([
             'email' => $user->email,
             'name' => $user->name,
-            'role' => $user->role
+            'role' => $user->role,
         ]);
     }
 
-    public function test_user_cannot_login_with_wrong_credentials()
+    /**
+     * @test
+     */
+    public function user_cannot_login_with_wrong_credentials()
     {
         $response = $this->post('/api/login', [
             'email' => fake()->email,

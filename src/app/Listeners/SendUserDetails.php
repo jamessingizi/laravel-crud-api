@@ -15,8 +15,8 @@ class SendUserDetails implements ShouldQueue
 
     public function handle(UserCreated $event): void
     {
-//        make fake call to external service with newly created user's details
-//        This will need to be replaced by a call to a real api
+        //        make fake call to external service with newly created user's details
+        //        This will need to be replaced by a call to a real api
         Http::fake([
             'https://api.external-service.com/new-user' => Http::response([
                 'data' => [
@@ -25,7 +25,7 @@ class SendUserDetails implements ShouldQueue
                     'phone_number' => $event->user->phone_number,
                     'role' => $event->user->role,
                 ],
-            ], 200)
+            ], 200),
         ]);
     }
 }

@@ -6,20 +6,23 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use function response;
+
 class AdminMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (! auth()->check() || auth()->user()->role != 'admin') {
-            return \response()->json([
-                "message" => "unauthorized!"
+            return response()->json([
+                'message' => 'unauthorized!',
             ], 401);
         }
+
         return $next($request);
     }
 }

@@ -19,7 +19,7 @@ class GetUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|integer'
+            'id' => 'required|integer',
         ];
     }
 

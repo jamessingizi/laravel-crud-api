@@ -14,7 +14,8 @@ class UserCreated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(public User $user)
-    {}
+    {
+    }
 
     /**
      * @return array<int, Channel>
