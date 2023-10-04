@@ -173,6 +173,103 @@ class UserTest extends TestCase
 
     }
 
-    //    TODO: test user can view their own details
-    //    TODO: test user can edit their own details
+    /**
+     * @test
+     */
+    public function user_can_view_their_details()
+    {
+        $user = User::factory()->create([
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'role' => 'user',
+        ]);
+        $response = $this->actingAs($user)->get("/api/user/{$user->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'role' => $user->role,
+        ]);
+
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_view_their_details_for_other_users()
+    {
+        $user1 = User::factory()->create([
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'role' => 'user',
+        ]);
+
+        $user2 = User::factory()->create([
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'role' => 'user',
+        ]);
+
+        $response = $this->actingAs($user2)->get("/api/user/{$user1->id}");
+
+        $response->assertStatus(401);
+        $response->assertJson([
+            'message' => 'unauthorised to view this resource'
+        ]);
+
+    }
+
+    /**
+     * @test
+     */
+    public function user_can_update_their_details()
+    {
+        $user = User::factory()->create([
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'phone_number' => '0772465712',
+            'role' => 'user',
+        ]);
+        $response = $this->actingAs($user)->put('/api/user/update_user', [
+            'id' => $user->id,
+            'name' => 'new name',
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'role' => $user->role,
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment([
+            'id' => $user->id,
+            'name' => 'new name',
+            'email' => $user->email,
+            'phone_number' => $user->phone_number,
+            'role' => $user->role,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_view_user_details_without_user_role()
+    {
+        $user = User::factory()->create([
+            'name' => fake()->name,
+            'email' => fake()->email,
+            'phone_number' => fake()->phoneNumber,
+            'role' => 'test',
+        ]);
+        $response = $this->actingAs($user)->get("/api/user/{$user->id}");
+
+        $response->assertStatus(401);
+        $response->assertJson([
+            'message' => 'unauthorized!'
+        ]);
+    }
+
 }
